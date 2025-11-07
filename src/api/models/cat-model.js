@@ -31,7 +31,6 @@ const updateCat = (data, id) => {
     ...data,
     cat_id: id
   };
-
   return cats[index];
 };
 

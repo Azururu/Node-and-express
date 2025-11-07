@@ -6,7 +6,7 @@ import {
   updateCat,
 } from '../models/cat-model.js';
 
-const getCat = (req, res) => {
+const getCats = (req, res) => {
   res.json(listAllCats());
 };
 
@@ -24,7 +24,7 @@ const postCat = (req, res) => {
   const result = addCat(req.body);
   if (result.cat_id) {
     res.status(201);
-    res.json({message: 'New cat added.', result});
+    res.json({message: 'Cat added successfully'});
   } else {
     res.sendStatus(400);
   }
@@ -50,4 +50,4 @@ const deleteCat = (req, res) => {
   }
 };
 
-export {getCat, getCatById, postCat, putCat, deleteCat};
+export {getCats, getCatById, postCat, putCat, deleteCat};

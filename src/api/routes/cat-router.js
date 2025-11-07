@@ -1,6 +1,6 @@
 import express from 'express';
 import {
-  getCat,
+  getCats,
   getCatById,
   postCat,
   putCat,
@@ -9,7 +9,7 @@ import {
 
 const catRouter = express.Router();
 
-catRouter.route('/').get(getCat).post(postCat);
+catRouter.route('/').get(getCats).post(postCat);
 
 catRouter.route('/:id').get(getCatById).put(putCat).delete(deleteCat);
 
