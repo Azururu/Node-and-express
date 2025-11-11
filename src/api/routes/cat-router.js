@@ -1,4 +1,5 @@
 import express from 'express';
+import {createThumbnail} from '../../middlewares/upload.js';
 import {
   getCats,
   getCatById,
@@ -12,7 +13,7 @@ const upload = multer({ dest: 'uploads/' });
 
 const catRouter = express.Router();
 
-catRouter.route('/').get(getCats).post(upload.single('file'), postCat);
+catRouter.route('/').get(getCats).post(upload.single('file'), createThumbnail, postCat);
 
 catRouter.route('/:id').get(getCatById).put(putCat).delete(deleteCat);
 
