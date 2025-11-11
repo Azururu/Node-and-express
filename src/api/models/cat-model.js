@@ -1,12 +1,20 @@
 const cats = [
   {
-    cat_id: 1,
+    cat_id: 9592,
     name: 'mr. meow',
     birthdate: '15-11-2020',
     weight: 4,
+    filename: 'jgkllj42lg',
     owner: 'Gerald',
-    image: 'https://loremflickr.com/320/240/cat'
-  }
+  },
+  {
+    cat_id: 9590,
+    name: 'mr. meow2',
+    birthdate: '15-11-2020',
+    weight: 6,
+    filename: '4jgklj1l4j5',
+    owner: 'Gerald',
+  },
 ];
 
 const listAllCats = () => {
@@ -18,9 +26,9 @@ const findCatById = id => {
 };
 
 const addCat = (cat) => {
-  const {name, birthdate, weight, owner, image} = cat;
+  const {name, birthdate, weight, filename, owner} = cat;
   const newId = cats[0].cat_id + 1;
-  cats.unshift({cat_id: newId, name, birthdate, weight, owner, image});
+  cats.unshift({cat_id: newId, name, birthdate, weight, filename, owner});
   return {cat_id: newId};
 };
 
@@ -41,5 +49,3 @@ const removeCat = id => {
 }
 
 export {listAllCats, findCatById, addCat, updateCat, removeCat};
-
-
