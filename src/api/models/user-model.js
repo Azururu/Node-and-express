@@ -15,6 +15,15 @@ const findUserById = async id => {
   return rows[0];
 };
 
+const findUserByUsername = async (username) => {
+  const sql = `SELECT * FROM wsk_users WHERE username = ?`;
+  const [rows] = await promisePool.execute(sql, [username]);
+  if (rows.length === 0) {
+    return false;
+  }
+  return rows[0];
+}
+
 const addUser = async user => {
   const {name, username, email, password, role} = user;
   const sql = `INSERT INTO wsk_users (name, username, email, password, role) VALUES (?, ?, ?, ?, ?)`;
@@ -28,22 +37,27 @@ const addUser = async user => {
 };
 
 const updateUser = async (data, id) => {
-  const sql = promisePool.format(`UPDATE wsk_users SET ? WHERE user_id = ?`, [data, id]);
-  const rows = await promisePool.execute(sql);
-  console.log('rows', rows);
-  if (rows[0].affectedRows === 0) {
-    return false;
-  }
-  return {message: 'success'};
-}
+  const sql = 'UPDATE wsk_users SET ? WHERE user_id = ?';
+  const [result] = await promisePool.execute(sql, [data, id]);
 
-const removeUser = async id => {
+  if (result.affectedRows === 0) return false;
+  return { message: 'success' };
+};
+
+const removeUser = async (id, loggedUserId, role) => {
+  let sql, params
   const connection = await promisePool.getConnection();
   try {
     await connection.beginTransaction();
+    if (role === 'admin') {
+      sql = 'DELETE FROM wsk_users WHERE user_id = ?';
+      params = [id];
+    } else {
+      sql = 'DELETE FROM wsk_users WHERE user_id = ? AND user_id = ?';
+      params = [id, loggedUserId];
+    }
     await connection.execute('DELETE FROM wsk_cats WHERE owner = ?', [id]);
-    const sql = connection.format('DELETE FROM wsk_users WHERE user_id = ?', [id]);
-    const [result] = await connection.execute(sql);
+    const [result] = await connection.execute(sql, params);
 
     if (result.affectedRows === 0) {
       return {message: 'User not deleted'};
@@ -60,4 +74,4 @@ const removeUser = async id => {
   }
 };
 
-export {listAllUsers, findUserById, addUser, updateUser, removeUser};
+export {listAllUsers, findUserById, addUser, updateUser, removeUser, findUserByUsername};
