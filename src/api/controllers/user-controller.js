@@ -6,12 +6,12 @@ import {
   removeUser
 } from '../models/user-model.js';
 
-const getUsers = (req, res) => {
-  res.json(listAllUsers());
+const getUsers = async (req, res) => {
+  res.json(await listAllUsers());
 }
 
-const getUserById = (req, res) => {
-  const user = findUserById(parseInt(req.params.id));
+const getUserById = async (req, res) => {
+  const user = await findUserById(parseInt(req.params.id));
   if (user) {
     res.status(200).json(user);
   } else {
@@ -19,8 +19,8 @@ const getUserById = (req, res) => {
   }
 };
 
-const postUser = (req, res) => {
-  const result = addUser(req.body);
+const postUser = async (req, res) => {
+  const result = await addUser(req.body);
   if (result.user_id) {
     res.status(201);
     res.json({message: 'User added successfully'});
@@ -29,8 +29,8 @@ const postUser = (req, res) => {
   }
 };
 
-const putUser = (req, res) => {
-  const updateData = updateUser(req.body, parseInt(req.params.id));
+const putUser = async (req, res) => {
+  const updateData = await updateUser(req.body, parseInt(req.params.id));
   if (updateData) {
     res.status(200)
     res.json({message: 'User item updated.'});
@@ -39,8 +39,8 @@ const putUser = (req, res) => {
   }
 };
 
-const deleteUser = (req, res) => {
-  const result = removeUser(req.params.id);
+const deleteUser = async (req, res) => {
+  const result = await removeUser(req.params.id);
   if (result) {
     res.status(200)
     res.json({message: 'User item deleted.'});
