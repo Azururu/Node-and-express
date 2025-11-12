@@ -1,17 +1,18 @@
 import {
   addCat,
   findCatById,
+  findCatsByUserId,
   listAllCats,
   removeCat,
   updateCat,
 } from '../models/cat-model.js';
 
-const getCats = (req, res) => {
-  res.json(listAllCats());
+const getCats = async (req, res) => {
+  res.json(await listAllCats());
 };
 
-const getCatById = (req, res) => {
-  const cat = findCatById(parseInt(req.params.id));
+const getCatById = async (req, res) => {
+  const cat = await findCatById(parseInt(req.params.id));
   if (cat) {
     res.status(200);
     res.json(cat);
@@ -20,12 +21,22 @@ const getCatById = (req, res) => {
   }
 };
 
-const postCat = (req, res) => {
+const getCatsByUserId = async (req, res) => {
+  const cats = await findCatsByUserId(parseInt(req.params.user_id));
+  if (cats.length !== 0) {
+    res.status(200);
+    res.json(cats);
+  } else {
+    res.status(404).send('No cat');
+  }
+}
+
+const postCat = async (req, res) => {
   console.log(req.body);
   console.log(req.file);
   console.log(req.file.filename);
   req.body.filename = req.file.filename;
-  const result = addCat(req.body);
+  const result = await addCat(req.body);
   if (result.cat_id) {
     res.status(201);
     res.json({message: 'Cat added successfully.', result});
@@ -34,8 +45,8 @@ const postCat = (req, res) => {
   }
 };
 
-const putCat = (req, res) => {
-  const updateData = updateCat(req.body, parseInt(req.params.id));
+const putCat = async (req, res) => {
+  const updateData = await updateCat(req.body, parseInt(req.params.id));
   if (updateData) {
     res.status(200);
     res.json({message: 'Cat item updated.', updateData});
@@ -44,8 +55,8 @@ const putCat = (req, res) => {
   }
 };
 
-const deleteCat = (req, res) => {
-  const result = removeCat(parseInt(req.params.id));
+const deleteCat = async (req, res) => {
+  const result = await removeCat(parseInt(req.params.id));
   if (result) {
     res.status(200);
     res.json({message: 'Cat item deleted.', result});
@@ -54,4 +65,4 @@ const deleteCat = (req, res) => {
   }
 };
 
-export {getCats, getCatById, postCat, putCat, deleteCat};
+export {getCats, getCatById, postCat, putCat, deleteCat, getCatsByUserId};
